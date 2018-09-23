@@ -1,0 +1,5 @@
+#if (!$latex.block.isInline())
+
+
+#end
+${latex.block.content}##
