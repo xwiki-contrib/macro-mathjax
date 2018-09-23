@@ -11,4 +11,4 @@ Enter content supported by the MathJax javascript engine
 * License: LGPL 2.1
 * Translations: N/A
 * Sonar Dashboard: N/A
-* Continuous Integration Status: [![Build Status](http://ci.xwiki.org/job/XWiki%20Contrib/job/mathjax/job/master/badge/icon)](http://ci.xwiki.org/job/XWiki%20Contrib/job/mathjax/job/master/)
+* Continuous Integration Status: [![Build Status](http://ci.xwiki.org/job/XWiki%20Contrib/job/macro-mathjax/job/master/badge/icon)](http://ci.xwiki.org/job/XWiki%20Contrib/job/macro-mathjax/job/master/)
