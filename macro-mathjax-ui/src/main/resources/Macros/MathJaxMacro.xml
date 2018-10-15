@@ -284,7 +284,7 @@ require(["$services.webjars.url('org.webjars.npm:mathjax', 'MathJax.js', { 'conf
       <code>{{velocity}}
 $xwiki.jsx.use('Macros.MathJaxMacro')
 
-{{html clean='false'}}
+{{html clean='true'}}
 $xcontext.macro.content
 {{/html}}
 {{/velocity}}</code>
