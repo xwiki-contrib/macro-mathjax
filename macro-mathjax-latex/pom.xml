@@ -42,7 +42,7 @@
     <dependency>
       <groupId>org.xwiki.contrib.latex</groupId>
       <artifactId>latex-export</artifactId>
-      <version>1.7</version>
+      <version>1.8</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
