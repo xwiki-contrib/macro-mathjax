@@ -35,8 +35,8 @@
   <description>Enter content supported by the MathJax javascript engine</description>
   <url>http://extensions.xwiki.org/xwiki/bin/view/Extension/MathJaxMacro/</url>
   <properties>
-    <xwiki.issueManagement.system>jira</xwiki.issueManagement.system>
-    <xwiki.issueManagement.url>https://jira.xwiki.org/browse/MATHJAX</xwiki.issueManagement.url>
+    <xwiki.release.jira.skip>false</xwiki.release.jira.skip>
+    <xwiki.issueManagement.jira.id>MATHJAX</xwiki.issueManagement.jira.id>
   </properties>
   <scm>
     <connection>scm:git:git://github.com/xwiki-contrib/macro-mathjax.git</connection>
