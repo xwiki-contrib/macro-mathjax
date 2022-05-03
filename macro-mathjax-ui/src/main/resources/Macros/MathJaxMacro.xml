@@ -147,9 +147,32 @@ window.MathJax = {
   TeX: { equationNumbers: { autoNumber: "AMS" } }
 };
 
-// Load MathJax using a webjars
-require(["$services.webjars.url('org.webjars.npm:mathjax', 'MathJax.js', { 'config' : 'TeX-AMS_HTML' })"]);
-</code>
+// Load MathJax from its WebJar.
+require(["$services.webjars.url('org.webjars.npm:mathjax', 'MathJax.js', { 'config' : 'TeX-AMS_HTML' })"], function() {
+  // The MathJax library adds some DIVs at the start of the BODY element (in order to display messages) and this leads
+  // to empty pages when exporting to PDF even when no message is displayed because they are not hidden (height: 1px).
+  // The best practice is to inject such DIVs at the end of the BODY element, which this clean-up function does.
+  const cleanUp = function() {
+    // Move the hidden MathJax containers at the end of the BODY element.
+    const containers = document.querySelectorAll('body &gt; div &gt; #MathJax_Hidden, body &gt; div &gt; #MathJax_SVG_Hidden');
+    containers.forEach(function(container) {
+      document.body.appendChild(container.parentNode);
+    });
+  };
+
+  // Delay the page ready until all formulas are generated, if supported.
+  if (require.defined('xwiki-page-ready')) {
+    require(['xwiki-page-ready'], function(pageReady) {
+      pageReady.delayPageReady(new Promise(function(resolve, reject) {
+        // See http://docs.mathjax.org/en/v2.7-latest/advanced/queues.html#the-mathjax-processing-queue
+        MathJax.Hub.Queue(function() {
+          cleanUp();
+          resolve();
+        });
+      }), 'MathJax');
+    });
+  }
+});</code>
     </property>
     <property>
       <name>MathJax</name>
@@ -158,7 +181,7 @@ require(["$services.webjars.url('org.webjars.npm:mathjax', 'MathJax.js', { 'conf
       <parse>1</parse>
     </property>
     <property>
-      <use>currentPage</use>
+      <use>onDemand</use>
     </property>
   </object>
   <object>
