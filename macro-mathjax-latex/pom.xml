@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.xwiki.contrib.mathjax</groupId>
     <artifactId>macro-mathjax</artifactId>
-    <version>1.0.4</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <artifactId>macro-mathjax-latex</artifactId>
   <name>MathJax Macro - LaTeX Template</name>
