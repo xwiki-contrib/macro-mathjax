@@ -306,7 +306,7 @@ $xwiki.jsx.use('Macros.MathJaxMacro')
 
 {{html clean='true'}}
 ## Replace { with the HTML entity to prevent any user-provided content from closing the HTML macro.
-$stringtool.replace($xcontext.macro.content, "{", "&#123;")
+$stringtool.replace($xcontext.macro.content, "{", "&amp;#123;")
 {{/html}}
 {{/velocity}}</code>
     </property>
