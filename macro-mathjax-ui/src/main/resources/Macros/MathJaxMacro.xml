@@ -27,12 +27,9 @@
   <defaultLanguage/>
   <translation>0</translation>
   <creator>xwiki:XWiki.Admin</creator>
-  <creationDate>1537523275000</creationDate>
   <parent>xwiki:Macros.WebHome</parent>
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
-  <date>1537536915000</date>
-  <contentUpdateDate>1537536915000</contentUpdateDate>
   <version>1.1</version>
   <title/>
   <comment/>
@@ -308,7 +305,8 @@ require(["$services.webjars.url('org.webjars.npm:mathjax', 'MathJax.js', { 'conf
 $xwiki.jsx.use('Macros.MathJaxMacro')
 
 {{html clean='true'}}
-$xcontext.macro.content
+## Replace { with the HTML entity to prevent any user-provided content from closing the HTML macro.
+$stringtool.replace($xcontext.macro.content, "{", "&#123;")
 {{/html}}
 {{/velocity}}</code>
     </property>

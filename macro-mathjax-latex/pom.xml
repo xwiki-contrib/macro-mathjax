@@ -42,7 +42,8 @@
     <dependency>
       <groupId>org.xwiki.contrib.latex</groupId>
       <artifactId>latex-export</artifactId>
-      <version>1.8</version>
+      <!-- First version requiring 13.10+ -->
+      <version>1.18</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

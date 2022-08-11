@@ -37,8 +37,7 @@
     <!-- Extension Manager category -->
     <xwiki.extension.category>macro</xwiki.extension.category>
     <xwiki.extension.name>MathJax Macro</xwiki.extension.name>
-
-    <!-- Components -->
+    <!-- Component declaration for the Extension Manager -->
     <xwiki.extension.components>
       org.xwiki.rendering.macro.Macro/mathjax
     </xwiki.extension.components>
