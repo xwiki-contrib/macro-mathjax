@@ -141,6 +141,7 @@ y = \frac{c}{cb-ad}
 window.MathJax = {
   displayAlign: "left",
   displayIndent: "2em",
+  elements: document.getElementsByClassName("xwiki-mathjax"),
   TeX: { equationNumbers: { autoNumber: "AMS" } }
 };
 
@@ -305,8 +306,18 @@ require(["$services.webjars.url('org.webjars.npm:mathjax', 'MathJax.js', { 'conf
 $xwiki.jsx.use('Macros.MathJaxMacro')
 
 {{html clean='true'}}
+#if ($wikimacro.context.isInline())
+&lt;span class="xwiki-mathjax"&gt;
+#else
+&lt;div class="xwiki-mathjax"&gt;
+#end
 ## Replace { with the HTML entity to prevent any user-provided content from closing the HTML macro.
 $stringtool.replace($xcontext.macro.content, "{", "&amp;#123;")
+#if ($wikimacro.context.isInline())
+&lt;/span&gt;
+#else
+&lt;/div&gt;
+#end
 {{/html}}
 {{/velocity}}</code>
     </property>
