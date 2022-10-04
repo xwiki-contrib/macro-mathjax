@@ -136,35 +136,51 @@ y = \frac{c}{cb-ad}
       <cache>long</cache>
     </property>
     <property>
-      <code>// Configure MathJax before it's loaded
-// See http://docs.mathjax.org/en/latest/configuration.html
-window.MathJax = {
-  displayAlign: "left",
-  displayIndent: "2em",
-  elements: document.getElementsByClassName("xwiki-mathjax"),
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-};
-
-// Load MathJax from its WebJar.
-require(["$services.webjars.url('org.webjars.npm:mathjax', 'MathJax.js', { 'config' : 'TeX-AMS_HTML' })"], function() {
-  // The MathJax library adds some DIVs at the start of the BODY element (in order to display messages) and this leads
-  // to empty pages when exporting to PDF even when no message is displayed because they are not hidden (height: 1px).
-  // The best practice is to inject such DIVs at the end of the BODY element, which this clean-up function does.
-  const cleanUp = function() {
-    // Move the hidden MathJax containers at the end of the BODY element.
-    const containers = document.querySelectorAll('body &gt; div &gt; #MathJax_Hidden, body &gt; div &gt; #MathJax_SVG_Hidden');
-    containers.forEach(function(container) {
-      document.body.appendChild(container.parentNode);
-    });
+      <code>define('configMathjax', function() {
+  // See http://docs.mathjax.org/en/latest/configuration.html
+  window.MathJax = {
+    chtml: {
+      displayAlign: "left",
+      displayIndent: "2em"
+    },
+    startup: {
+      elements: document.getElementsByClassName("xwiki-mathjax")
+    },
+    tex: {
+      tags: "ams",
+      autoload: {
+        color: [],
+        colorv2: ['color']
+      },
+      packages: {'[+]': ['noerrors']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    },
+    loader: {
+      load: ['[tex]/noerrors']
+    }
   };
+});
 
+// Configure MathJax before loading it.
+require.config({
+  paths: {
+    'mathjax': "$services.webjars.url('org.webjars.npm:mathjax', 'es5/tex-chtml.js')"
+  },
+  shim: {
+    'mathjax': ['configMathjax']
+  }
+});
+
+require(["jquery", 'mathjax'], function($, math) {
   // Delay the page ready until all formulas are generated, if supported.
   if (require.defined('xwiki-page-ready')) {
     require(['xwiki-page-ready'], function(pageReady) {
       pageReady.delayPageReady(new Promise(function(resolve, reject) {
-        // See http://docs.mathjax.org/en/v2.7-latest/advanced/queues.html#the-mathjax-processing-queue
-        MathJax.Hub.Queue(function() {
-          cleanUp();
+        // See https://docs.mathjax.org/en/latest/web/configuration.html#performing-actions-after-typesetting
+        MathJax.startup.promise.then(() =&gt; {
           resolve();
         });
       }), 'MathJax');
