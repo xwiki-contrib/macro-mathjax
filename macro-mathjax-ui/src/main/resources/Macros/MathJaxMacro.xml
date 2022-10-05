@@ -186,6 +186,26 @@ require(["jquery", 'mathjax'], function($, math) {
       }), 'MathJax');
     });
   }
+
+  // Chain typesetting calls, since multiple simultaneously asynchronous typesetting calls can produce errors.
+  // See https://docs.mathjax.org/en/latest/web/typeset.html#handling-asynchronous-typesetting.
+  let promise = Promise.resolve();
+  var typeset = function(elems) {
+    promise = promise.then(() =&gt; {
+      // Reset the tex labels, since re-typesetting might create duplicate labels.
+      MathJax.texReset();
+      MathJax.typesetPromise(elems);
+    }).catch((err) =&gt; console.log('Typeset failed: ' + err.message));
+
+    return promise;
+  };
+
+  $(document).on('xwiki:dom:updated', function(e, data) {
+    let mathElems = data.elements.flatMap(x =&gt; {
+      return x.hasClassName('xwiki-mathjax') ? [x] : [...x.querySelectorAll('.xwiki-mathjax')];
+    });
+    typeset(mathElems);
+  });
 });</code>
     </property>
     <property>
