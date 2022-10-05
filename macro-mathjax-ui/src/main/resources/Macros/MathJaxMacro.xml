@@ -196,8 +196,6 @@ require(["jquery", 'mathjax'], function($, math) {
       MathJax.texReset();
       MathJax.typesetPromise(elems);
     }).catch((err) =&gt; console.log('Typeset failed: ' + err.message));
-
-    return promise;
   };
 
   $(document).on('xwiki:dom:updated', function(e, data) {
