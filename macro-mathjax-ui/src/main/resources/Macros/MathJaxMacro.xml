@@ -178,7 +178,7 @@ require(["jquery", 'mathjax'], function($, math) {
   var promise = Promise.resolve();
   // Delay the page ready until all formulas are generated, if supported.
   if (require.defined('xwiki-page-ready')) {
-    promise = new Promise(function(resolve, reject) {
+    promise = new Promise(function(resolve) {
       // See https://docs.mathjax.org/en/latest/web/configuration.html#performing-actions-after-typesetting
       MathJax.startup.promise.then(() =&gt; {
         resolve();
@@ -195,7 +195,7 @@ require(["jquery", 'mathjax'], function($, math) {
     promise = promise.then(() =&gt; {
       // Reset the tex labels, since re-typesetting might create duplicate labels.
       MathJax.texReset();
-      MathJax.typesetPromise(elems);
+      return MathJax.typesetPromise(elems);
     }).catch((err) =&gt; console.log('Typeset failed: ' + err.message));
   };
 
@@ -338,7 +338,7 @@ require(["jquery", 'mathjax'], function($, math) {
     </class>
     <property>
       <code>{{velocity}}
-$xwiki.jsx.use('Macros.MathJaxMacro')
+$xwiki.jsx.use('Macros.MathJaxMacro', {'wysiwyg': true})
 
 {{html clean='true'}}
 #if ($wikimacro.context.isInline())
