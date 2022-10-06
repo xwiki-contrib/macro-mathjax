@@ -175,21 +175,22 @@ require.config({
 });
 
 require(["jquery", 'mathjax'], function($, math) {
+  var promise = Promise.resolve();
   // Delay the page ready until all formulas are generated, if supported.
   if (require.defined('xwiki-page-ready')) {
+    promise = new Promise(function(resolve, reject) {
+      // See https://docs.mathjax.org/en/latest/web/configuration.html#performing-actions-after-typesetting
+      MathJax.startup.promise.then(() =&gt; {
+        resolve();
+      });
+    });
     require(['xwiki-page-ready'], function(pageReady) {
-      pageReady.delayPageReady(new Promise(function(resolve, reject) {
-        // See https://docs.mathjax.org/en/latest/web/configuration.html#performing-actions-after-typesetting
-        MathJax.startup.promise.then(() =&gt; {
-          resolve();
-        });
-      }), 'MathJax');
+      pageReady.delayPageReady(promise, 'MathJax');
     });
   }
 
   // Chain typesetting calls, since multiple simultaneously asynchronous typesetting calls can produce errors.
   // See https://docs.mathjax.org/en/latest/web/typeset.html#handling-asynchronous-typesetting.
-  let promise = Promise.resolve();
   var typeset = function(elems) {
     promise = promise.then(() =&gt; {
       // Reset the tex labels, since re-typesetting might create duplicate labels.
