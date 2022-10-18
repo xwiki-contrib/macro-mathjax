@@ -346,10 +346,10 @@ $xwiki.jsx.use('Macros.MathJaxMacro', {'wysiwyg': true})
 #else
 &lt;div class="xwiki-mathjax"&gt;
 #end
-## Replace { with the HTML entity to prevent any user-provided content from closing the HTML macro.
-## Also XML-escape the macro content to avoid HTML content such as javascript from being executed.
-## (The HTML macro is used only to properly wrap the content in SPAN and DIV which is hard to do with wiki syntax)
-$stringtool.replace($escapetool.xml($xcontext.macro.content), "{", "&amp;#123;")
+## XML-escape the macro content to avoid HTML content such as javascript from being executed (it also escapes the
+## "{" character and thus prevents any user-provided content from closing the HTML macro).
+## Note: The HTML macro is used only to properly wrap the content in SPAN and DIV which is hard to do with wiki syntax
+$escapetool.xml($xcontext.macro.content)
 #if ($wikimacro.context.isInline())
 &lt;/span&gt;
 #else
