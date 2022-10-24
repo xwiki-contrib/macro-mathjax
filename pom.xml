@@ -49,6 +49,16 @@
       <id>vmassol</id>
       <name>Vincent Massol</name>
     </developer>
+    <developer>
+      <id>mleduc</id>
+      <name>Manuel Leduc</name>
+      <organization>XWiki SAS</organization>
+      <organizationUrl>https://www.xwiki.com/</organizationUrl>
+    </developer>
+    <developer>
+      <id>oflorean</id>
+      <name>Oana-Lavinia Florean</name>
+    </developer>
   </developers>
   <modules>
     <module>macro-mathjax-latex</module>
