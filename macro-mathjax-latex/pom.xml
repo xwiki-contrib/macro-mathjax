@@ -37,6 +37,8 @@
     <!-- Extension Manager category -->
     <xwiki.extension.category>api</xwiki.extension.category>
     <xwiki.extension.name>MathJax LaTeX Template</xwiki.extension.name>
+    <xwiki.release.jira.skip>false</xwiki.release.jira.skip>
+    <xwiki.issueManagement.jira.id>MATHJAX</xwiki.issueManagement.jira.id>
   </properties>
   <dependencies>
     <dependency>
