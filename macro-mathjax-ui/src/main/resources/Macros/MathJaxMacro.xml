@@ -138,13 +138,13 @@ y = \frac{c}{cb-ad}
     <property>
       <code>define('configMathjax', function() {
   // See http://docs.mathjax.org/en/latest/configuration.html
+  // Add 'elements' configuration to typeset only mathjax macro content (i.e. elements with xwiki-mathjax class),
+  // instead of typesetting the whole page. This should be done after this bug is fixed
+  // https://github.com/mathjax/MathJax/issues/2999 .
   window.MathJax = {
     chtml: {
       displayAlign: "left",
       displayIndent: "2em"
-    },
-    startup: {
-      elements: document.getElementsByClassName("xwiki-mathjax")
     },
     tex: {
       tags: "ams",
@@ -187,19 +187,18 @@ require(["jquery", 'mathjax'], function($, math) {
 
   // Chain typesetting calls, since multiple simultaneously asynchronous typesetting calls can produce errors.
   // See https://docs.mathjax.org/en/latest/web/typeset.html#handling-asynchronous-typesetting.
-  var typeset = function(elems) {
+  var typeset = function() {
     promise = promise.then(() =&gt; {
       // Reset the tex labels, since re-typesetting might create duplicate labels.
       MathJax.texReset();
-      return MathJax.typesetPromise(elems);
+      return MathJax.typesetPromise();
     }).catch((err) =&gt; console.log('Typeset failed: ' + err.message));
   };
 
   $(document).on('xwiki:dom:updated', function(e, data) {
-    let mathElems = data.elements.flatMap(x =&gt; {
-      return x.hasClassName('xwiki-mathjax') ? [x] : [...x.querySelectorAll('.xwiki-mathjax')];
-    });
-    typeset(mathElems);
+    // The typeset should be done only on modified mathjax elements, instead of doing it on the whole page, after this
+    // bug is fixed https://github.com/mathjax/MathJax/issues/2999 .
+    typeset();
   });
 });</code>
     </property>
