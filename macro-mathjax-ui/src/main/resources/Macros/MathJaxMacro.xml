@@ -138,13 +138,19 @@ y = \frac{c}{cb-ad}
     <property>
       <code>define('configMathjax', function() {
   // See http://docs.mathjax.org/en/latest/configuration.html
+  // In order to avoid https://github.com/mathjax/MathJax/issues/2999, the 'elements' configuration was removed. Right
+  // now, a ignoreHtmlClass was added to the body, in order to force Mathjax to typeset only elements that have the
+  // the processHtmlClass (i.e. xwiki-mathjax).
   window.MathJax = {
     chtml: {
       displayAlign: "left",
       displayIndent: "2em"
     },
     startup: {
-      elements: document.getElementsByClassName("xwiki-mathjax")
+      pageReady() {
+        document.body.classList.add('mathjax-ignore');
+        return MathJax.startup.defaultPageReady();
+      }
     },
     tex: {
       tags: "ams",
@@ -155,8 +161,8 @@ y = \frac{c}{cb-ad}
       packages: {'[+]': ['noerrors']}
     },
     options: {
-      ignoreHtmlClass: 'tex2jax_ignore',
-      processHtmlClass: 'tex2jax_process'
+      ignoreHtmlClass: 'mathjax-ignore',
+      processHtmlClass: 'xwiki-mathjax'
     },
     loader: {
       load: ['[tex]/noerrors']
@@ -187,19 +193,18 @@ require(["jquery", 'mathjax'], function($, math) {
 
   // Chain typesetting calls, since multiple simultaneously asynchronous typesetting calls can produce errors.
   // See https://docs.mathjax.org/en/latest/web/typeset.html#handling-asynchronous-typesetting.
-  var typeset = function(elems) {
+  var typeset = function() {
     promise = promise.then(() =&gt; {
       // Reset the tex labels, since re-typesetting might create duplicate labels.
       MathJax.texReset();
-      return MathJax.typesetPromise(elems);
+      return MathJax.typesetPromise();
     }).catch((err) =&gt; console.log('Typeset failed: ' + err.message));
   };
 
   $(document).on('xwiki:dom:updated', function(e, data) {
-    let mathElems = data.elements.flatMap(x =&gt; {
-      return x.hasClassName('xwiki-mathjax') ? [x] : [...x.querySelectorAll('.xwiki-mathjax')];
-    });
-    typeset(mathElems);
+    // The typeset should be done only on modified mathjax elements, instead of doing it on the whole page, after this
+    // bug is fixed https://github.com/mathjax/MathJax/issues/2999 .
+    typeset();
   });
 });</code>
     </property>
