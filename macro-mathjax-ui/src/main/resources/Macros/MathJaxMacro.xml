@@ -138,13 +138,19 @@ y = \frac{c}{cb-ad}
     <property>
       <code>define('configMathjax', function() {
   // See http://docs.mathjax.org/en/latest/configuration.html
-  // Add 'elements' configuration to typeset only mathjax macro content (i.e. elements with xwiki-mathjax class),
-  // instead of typesetting the whole page. This should be done after this bug is fixed
-  // https://github.com/mathjax/MathJax/issues/2999 .
+  // In order to avoid https://github.com/mathjax/MathJax/issues/2999, the 'elements' configuration was removed. Right
+  // now, a ignoreHtmlClass was added to the body, in order to force Mathjax to typeset only elements that have the
+  // the processHtmlClass (i.e. xwiki-mathjax).
   window.MathJax = {
     chtml: {
       displayAlign: "left",
       displayIndent: "2em"
+    },
+    startup: {
+      pageReady() {
+        document.body.classList.add('mathjax-ignore');
+        return MathJax.startup.defaultPageReady();
+      }
     },
     tex: {
       tags: "ams",
@@ -155,8 +161,8 @@ y = \frac{c}{cb-ad}
       packages: {'[+]': ['noerrors']}
     },
     options: {
-      ignoreHtmlClass: 'tex2jax_ignore',
-      processHtmlClass: 'tex2jax_process'
+      ignoreHtmlClass: 'mathjax-ignore',
+      processHtmlClass: 'xwiki-mathjax'
     },
     loader: {
       load: ['[tex]/noerrors']
