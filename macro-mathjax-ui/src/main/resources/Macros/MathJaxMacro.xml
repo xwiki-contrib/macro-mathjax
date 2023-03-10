@@ -136,7 +136,7 @@ y = \frac{c}{cb-ad}
       <cache>long</cache>
     </property>
     <property>
-      <code>define('configMathjax', function() {
+      <code>define('configMathjax', ['jquery'], function($) {
   // See http://docs.mathjax.org/en/latest/configuration.html
   // In order to avoid https://github.com/mathjax/MathJax/issues/2999, the 'elements' configuration was removed. Right
   // now, a ignoreHtmlClass was added to the body, in order to force Mathjax to typeset only elements that have the
@@ -149,8 +149,27 @@ y = \frac{c}{cb-ad}
     startup: {
       pageReady() {
         document.body.classList.add('mathjax-ignore');
-        return MathJax.startup.defaultPageReady();
-      }
+        // Since the same macro will be displayed twice in a rendered diff, we typeset each one individually in order to
+        // avoid errors from duplicate labels. This will produce some inconsistences with the displayed equation
+        // numbers, meaning that each macro will start counting from 0 and anchor ids will be duplicated.
+        if ($('#renderedChanges').length &gt; 0) {
+          let promise = MathJax.startup.defaultPageReady();
+          $('.xwiki-mathjax').each((i, el) =&gt; {
+            // Mathjax doesn't typesets math code mixed with html content.
+            el.innerHTML = el.textContent;
+            promise = promise.then(() =&gt; {
+              // Reset the tex labels.
+              MathJax.texReset();
+              return MathJax.typesetPromise([el]);
+            });
+          });
+          return promise;
+       } else {
+         // Let MathJax handle typeset.
+         return MathJax.startup.defaultPageReady();
+       }
+      },
+      typeset: $('#renderedChanges').length &gt; 0 ? false : true
     },
     tex: {
       tags: "ams",
