@@ -151,7 +151,7 @@ y = \frac{c}{cb-ad}
         document.body.classList.add('mathjax-ignore');
         // Since the same macro will be displayed twice in a rendered diff, we typeset each one individually in order to
         // avoid errors from duplicate labels. This will produce some inconsistences with the displayed equation
-        // numbers, meaning that each macro will start counting from 0 and anchor ids will be duplicated.
+        // numbers, meaning that each macro will start counting from 1 and anchor ids will be duplicated.
         if ($('#renderedChanges').length &gt; 0) {
           let promise = MathJax.startup.defaultPageReady();
           $('.xwiki-mathjax').each((i, el) =&gt; {
