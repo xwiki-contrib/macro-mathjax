@@ -169,7 +169,7 @@ y = \frac{c}{cb-ad}
          return MathJax.startup.defaultPageReady();
        }
       },
-      typeset: $('#renderedChanges').length &gt; 0 ? false : true
+      typeset: $('#renderedChanges').length &lt;= 0
     },
     tex: {
       tags: "ams",
