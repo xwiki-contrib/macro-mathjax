@@ -136,7 +136,7 @@ y = \frac{c}{cb-ad}
       <cache>long</cache>
     </property>
     <property>
-      <code>define('configMathjax', ['jquery'], function($) {
+      <code>define('setupMathjax', ['jquery'], function($) {
   // See http://docs.mathjax.org/en/latest/configuration.html
   // In order to avoid https://github.com/mathjax/MathJax/issues/2999, the 'elements' configuration was removed. Right
   // now, a ignoreHtmlClass was added to the body, in order to force Mathjax to typeset only elements that have the
@@ -149,21 +149,8 @@ y = \frac{c}{cb-ad}
     startup: {
       pageReady() {
         document.body.classList.add('mathjax-ignore');
-        // Since the same macro will be displayed twice in a rendered diff, we typeset each one individually in order to
-        // avoid errors from duplicate labels. This will produce some inconsistences with the displayed equation
-        // numbers, meaning that each macro will start counting from 1 and anchor ids will be duplicated.
         if ($('#renderedChanges').length &gt; 0) {
-          let promise = MathJax.startup.defaultPageReady();
-          $('.xwiki-mathjax').each((i, el) =&gt; {
-            // Mathjax doesn't typesets math code mixed with html content.
-            el.innerHTML = el.textContent;
-            promise = promise.then(() =&gt; {
-              // Reset the tex labels.
-              MathJax.texReset();
-              return MathJax.typesetPromise([el]);
-            });
-          });
-          return promise;
+          return typesetInRenderedDiffViewPromise().then(() =&gt; clearAndTypesetPromise());
        } else {
          // Let MathJax handle typeset.
          return MathJax.startup.defaultPageReady();
@@ -187,6 +174,45 @@ y = \frac{c}{cb-ad}
       load: ['[tex]/noerrors']
     }
   };
+
+  /**
+   * Reset the tex labels, since re-typesetting might create duplicate labels, and perform an asynchronous typesetting.
+   * See https://docs.mathjax.org/en/latest/web/typeset.html#handling-asynchronous-typesetting.
+   */
+  var clearAndTypesetPromise = function(elems) {
+    let typesetPromise;
+    MathJax.texReset();
+    // Using the elements parameter could lead to bugs https://github.com/mathjax/MathJax/issues/2999, so for now
+    // typesetting specific elements should be used only if equations numbering does not count. For example, this is
+    // used for typesetting in rendered diff view, since only one math element is send at a time.
+    typesetPromise = MathJax.typesetPromise(elems);
+    typesetPromise.catch((err) =&gt; console.log('Typeset failed: ' + err.message));
+    return typesetPromise;
+  };
+
+  /**
+   * Since the same macro will be displayed twice in a rendered diff view, we typeset each one individually in order to
+   * avoid errors from duplicate labels. This will produce some inconsistences with the displayed equation numbers,
+   * meaning that each macro will start counting from 1 and anchor ids will be duplicated.
+   */
+  var typesetInRenderedDiffViewPromise = function() {
+    let promise = Promise.resolve();
+    $('#renderedChanges .xwiki-mathjax').each((i, el) =&gt; {
+      if ($(el).find('mjx-container').length &gt; 0) {
+        return;
+      }
+      // Mathjax doesn't typesets math code mixed with html content.
+      el.innerHTML = el.textContent;
+      promise = promise.then(() =&gt; clearAndTypesetPromise([el]));
+    });
+
+    return promise;
+  };
+
+  return {
+    clearAndTypesetPromise: clearAndTypesetPromise,
+    typesetInRenderedDiffViewPromise: typesetInRenderedDiffViewPromise
+  };
 });
 
 // Configure MathJax before loading it.
@@ -195,35 +221,29 @@ require.config({
     'mathjax': "$services.webjars.url('org.webjars.npm:mathjax', 'es5/tex-chtml.js')"
   },
   shim: {
-    'mathjax': ['configMathjax']
+    'mathjax': ['setupMathjax']
   }
 });
 
-require(["jquery", 'mathjax'], function($, math) {
-  var promise = Promise.resolve();
+require(["jquery", 'mathjax', 'setupMathjax'], function($, math, setup) {
+  // See https://docs.mathjax.org/en/latest/web/configuration.html#performing-actions-after-typesetting.
+  var promise = MathJax.startup.promise;
   // Delay the page ready until all formulas are generated, if supported.
   if (require.defined('xwiki-page-ready')) {
-    // See https://docs.mathjax.org/en/latest/web/configuration.html#performing-actions-after-typesetting.
-    promise = MathJax.startup.promise;
     require(['xwiki-page-ready'], function(pageReady) {
       pageReady.delayPageReady(promise, 'MathJax');
     });
   }
 
-  // Chain typesetting calls, since multiple simultaneously asynchronous typesetting calls can produce errors.
-  // See https://docs.mathjax.org/en/latest/web/typeset.html#handling-asynchronous-typesetting.
-  var typeset = function() {
-    promise = promise.then(() =&gt; {
-      // Reset the tex labels, since re-typesetting might create duplicate labels.
-      MathJax.texReset();
-      return MathJax.typesetPromise();
-    }).catch((err) =&gt; console.log('Typeset failed: ' + err.message));
-  };
-
   $(document).on('xwiki:dom:updated', function(e, data) {
     // The typeset should be done only on modified mathjax elements, instead of doing it on the whole page, after this
     // bug is fixed https://github.com/mathjax/MathJax/issues/2999 .
-    typeset();
+    if ($('#renderedChanges').length &gt; 0) {
+      promise.then(() =&gt; setup.typesetInRenderedDiffViewPromise())
+        .then(() =&gt; setup.clearAndTypesetPromise());
+    } else {
+      promise.then(() =&gt; setup.clearAndTypesetPromise());
+    }
   });
 });</code>
     </property>
