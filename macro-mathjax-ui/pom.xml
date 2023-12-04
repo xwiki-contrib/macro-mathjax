@@ -44,13 +44,6 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>org.xwiki.contrib.mathjax</groupId>
-      <artifactId>macro-mathjax-latex</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-rendering-macro-velocity</artifactId>
       <version>${platform.version}</version>
