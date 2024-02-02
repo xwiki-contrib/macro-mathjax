@@ -151,10 +151,12 @@ y = \frac{c}{cb-ad}
         document.body.classList.add('mathjax-ignore');
         if ($('#renderedChanges').length &gt; 0) {
           return typesetInRenderedDiffViewPromise().then(() =&gt; clearAndTypesetPromise());
-       } else {
-         // Let MathJax handle typeset.
-         return MathJax.startup.defaultPageReady();
-       }
+        } else {
+          // Backup the formula source code in a data attribute and cleanup formulas that are already rendered.
+          prepareFormulas();
+          // Let MathJax handle typeset.
+          return MathJax.startup.defaultPageReady();
+        }
       },
       typeset: $('#renderedChanges').length &lt;= 0
     },
@@ -174,6 +176,20 @@ y = \frac{c}{cb-ad}
       load: ['[tex]/noerrors']
     }
   };
+
+  function prepareFormulas() {
+    // Go through all the MathJax formulas we can find in the page.
+    document.querySelectorAll('.xwiki-mathjax').forEach(mathjaxWrapper =&gt; {
+      // Check if the MathJax formula source code was already backed up.
+      if (mathjaxWrapper.hasAttribute('data-xwiki-mathjax')) {
+        // Force a new rendering by resetting the wrapper text content using the backed up formula source.
+        mathjaxWrapper.textContent = mathjaxWrapper.getAttribute('data-xwiki-mathjax');
+      } else {
+        // Backup the formula source code in order to be able to force a re-rendering.
+        mathjaxWrapper.setAttribute('data-xwiki-mathjax', mathjaxWrapper.textContent);
+      }
+    });
+  }
 
   /**
    * Reset the tex labels, since re-typesetting might create duplicate labels, and perform an asynchronous typesetting.
