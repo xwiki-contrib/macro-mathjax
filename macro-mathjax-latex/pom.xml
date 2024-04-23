@@ -31,15 +31,38 @@
   <name>MathJax Macro - LaTeX Template</name>
   <description>Template for the MathJax macro when exporting to LaTeX</description>
   <properties>
-    <latex.version>1.18</latex.version>
+    <latex.version>1.25</latex.version>
     <!-- Don't run CLIRR here since there's no Java code. -->
     <xwiki.clirr.skip>true</xwiki.clirr.skip>
     <!-- Extension Manager category -->
     <xwiki.extension.category>api</xwiki.extension.category>
     <xwiki.extension.name>MathJax LaTeX Template</xwiki.extension.name>
-    <xwiki.release.jira.skip>false</xwiki.release.jira.skip>
-    <xwiki.issueManagement.jira.id>MATHJAX</xwiki.issueManagement.jira.id>
   </properties>
+  <!-- Override some dependency versions used by LaTeX 1.25 and newer than the ones brought XWiki 14.10 -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.github.docker-java</groupId>
+        <artifactId>docker-java-core</artifactId>
+        <version>3.3.6</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.docker-java</groupId>
+        <artifactId>docker-java-transport-httpclient5</artifactId>
+        <version>3.3.6</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-archiver</artifactId>
+        <version>4.8.0</version>
+      </dependency>
+      <dependency>
+        <groupId>net.java.dev.jna</groupId>
+        <artifactId>jna</artifactId>
+        <version>5.13.0</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>org.xwiki.contrib.latex</groupId>

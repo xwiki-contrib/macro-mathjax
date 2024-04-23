@@ -7,7 +7,7 @@ Enter content supported by the MathJax javascript engine.
 * [Issue Tracker](https://jira.xwiki.org/browse/MATHJAX)
 * Communication: [Forum](https://forum.xwiki.org/), [Chat](https://dev.xwiki.org/xwiki/bin/view/Community/Chat)
 * [Development Practices](https://dev.xwiki.org)
-* Minimal XWiki version supported: XWiki 14.9
+* Minimal XWiki version supported: XWiki 14.10
 * License: LGPL 2.1
 * Translations: N/A
 * Sonar Dashboard: N/A
