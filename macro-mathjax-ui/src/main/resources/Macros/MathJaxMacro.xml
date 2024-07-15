@@ -424,7 +424,7 @@ $escapetool.xml($xcontext.macro.content)##
       <defaultCategory>Content</defaultCategory>
     </property>
     <property>
-      <description/>
+      <description>Enter content supported by the MathJax javascript engine</description>
     </property>
     <property>
       <id>mathjax</id>
