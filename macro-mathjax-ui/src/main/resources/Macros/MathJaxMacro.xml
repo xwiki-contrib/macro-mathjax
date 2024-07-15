@@ -421,7 +421,7 @@ $escapetool.xml($xcontext.macro.content)##
       <contentType>Mandatory</contentType>
     </property>
     <property>
-      <defaultCategory>content</defaultCategory>
+      <defaultCategory>Content</defaultCategory>
     </property>
     <property>
       <description/>
