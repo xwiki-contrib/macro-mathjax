@@ -31,7 +31,7 @@
   <name>MathJax Macro - LaTeX Template</name>
   <description>Template for the MathJax macro when exporting to LaTeX</description>
   <properties>
-    <latex.version>1.25</latex.version>
+    <latex.version>1.26.1</latex.version>
     <!-- Don't run CLIRR here since there's no Java code. -->
     <xwiki.clirr.skip>true</xwiki.clirr.skip>
     <!-- Extension Manager category -->
