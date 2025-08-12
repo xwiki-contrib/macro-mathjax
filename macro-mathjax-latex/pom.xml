@@ -30,6 +30,7 @@
   <artifactId>macro-mathjax-latex</artifactId>
   <name>MathJax Macro - LaTeX Template</name>
   <description>Template for the MathJax macro when exporting to LaTeX</description>
+  <url>https://extensions.xwiki.org/xwiki/bin/view/Extension/MathJax/MathJax%20LaTeX%20Template/</url>
   <properties>
     <latex.version>1.26.1</latex.version>
     <!-- Don't run CLIRR here since there's no Java code. -->
