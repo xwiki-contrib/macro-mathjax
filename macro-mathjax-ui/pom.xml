@@ -31,7 +31,6 @@
   <packaging>xar</packaging>
   <name>MathJax Macro - UI</name>
   <description>Enter content supported by the MathJax javascript engine</description>
-  <url>https://extensions.xwiki.org/xwiki/bin/view/Extension/MathJax/MathJaxMacro/</url>
   <properties>
     <!-- Don't run CLIRR here since there's no Java code. -->
     <xwiki.clirr.skip>true</xwiki.clirr.skip>

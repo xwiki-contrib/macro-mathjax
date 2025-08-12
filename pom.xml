@@ -33,7 +33,6 @@
   <packaging>pom</packaging>
   <name>MathJax Macro - Parent POM</name>
   <description>Enter content supported by the MathJax javascript engine</description>
-  <url>https://extensions.xwiki.org/xwiki/bin/view/Extension/MathJax/</url>
   <properties>
     <xwiki.release.jira.skip>false</xwiki.release.jira.skip>
     <xwiki.issueManagement.jira.id>MATHJAX</xwiki.issueManagement.jira.id>
