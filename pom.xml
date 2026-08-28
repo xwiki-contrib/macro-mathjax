@@ -62,6 +62,7 @@
   <modules>
     <module>macro-mathjax-latex</module>
     <module>macro-mathjax-ui</module>
+    <module>macro-mathjax-xip</module>
   </modules>
   <dependencyManagement>
     <dependencies>
